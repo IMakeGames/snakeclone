@@ -1,0 +1,8 @@
+.settings
+.cproject
+.project
+libpng16-16.dll
+SDL2.dll
+SDL2_image.dll
+SDL/
+*.exe
