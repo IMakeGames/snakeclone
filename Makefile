@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = snake_main.cpp classes.cpp
+OBJS = snake_main.cpp classes.cpp texture_loader.cpp
 
 #CC specifies which compiler we're using
 CC = g++

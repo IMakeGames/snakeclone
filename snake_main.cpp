@@ -20,12 +20,20 @@ SDL_Window* gWindow = NULL;
 
 SDL_Renderer* gRenderer = NULL;
 
+TexLoader* snkTexLoader;
+
+SDL_Texture* gTexture;
 bool init(){
 	bool success = true;
 	if( SDL_Init( SDL_INIT_VIDEO) < 0){
 		printf("SDL could  not initialize!! SDL_Error: %s\n", SDL_GetError());
 		success = false;
 	}else{
+		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+		{
+			printf( "Warning: Linear texture filtering not enabled!" );
+		}
+
 		gWindow = SDL_CreateWindow("MY SDL TUTORIAL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		if( gWindow == NULL){
 			printf("Window could not be created and that's it. Error: %s\n", SDL_GetError());
@@ -35,11 +43,26 @@ bool init(){
 			if( gRenderer == NULL){
 				printf("Renderer could not be created and that's it. Error: %s\n", SDL_GetError());
 				success = false;
+			}else{
+				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+
+				int imgFlags = IMG_INIT_PNG;
+
+				if(!(IMG_Init(imgFlags) & imgFlags)){
+					printf( "SDL_image could not initialize! SDL_mage Error: %s\n", IMG_GetError() );
+					success = false;
+				}
 			}
 		}
 	}
 	sects[0] = new GameObjt(SCREEN_WIDTH/0x02,SCREEN_HEIGHT/0x02, RIGHT, 0x00);
 	apple = new GameObjt(0x00,0x00, DEFAULT, 0xFF);
+	snkTexLoader = new TexLoader();
+
+	snkTexLoader->loadFromFile("assets/snak_ssheat.png", gRenderer);
+	sects[0]->seText(snkTexLoader->getTex(), 0, 0);
+	apple->seText(snkTexLoader->getTex(), 0, 2);
+
 	return success;
 }
 
@@ -58,6 +81,8 @@ void close(){
 		}
 	}
 	delete sects;
+	delete apple;
+	delete snkTexLoader;
 }
 
 int main( int argc, char* args[] )
@@ -103,10 +128,11 @@ int main( int argc, char* args[] )
 			SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 			SDL_RenderClear(gRenderer);
 			if(sects[0]->gx() < apple->gx() + 0x20 && sects[0]->gx() + 0x20 > apple->gx() && sects[0]->gy() < apple->gy() + 0x20 && sects[0]->gy() + 0x20 > apple->gy()){
-				printf("Collision!!");
+				printf("Collision!!\n");
 				fflush(stdout);
 				sectIndex++;
 				sects[sectIndex] = new GameObjt(sects[sectIndex -1]->gx(),sects[sectIndex -1]->gy(), DEFAULT, sectIndex);
+				sects[sectIndex]->seText(snkTexLoader->getTex(), 0, 1);
 				apple->sx((distribution(generator)-1)*0x20);
 				apple->sy((distribution(generator)-1)*0x20);
 			}
@@ -120,7 +146,6 @@ int main( int argc, char* args[] )
 				sects[i]->render(gRenderer);
 			}
 			apple->render(gRenderer);
-
 			SDL_RenderPresent( gRenderer );
 
 			Uint32 endTime = SDL_GetTicks();
@@ -131,7 +156,6 @@ int main( int argc, char* args[] )
 		}
 
 	}
-
 	close();
 
 	return 0;
