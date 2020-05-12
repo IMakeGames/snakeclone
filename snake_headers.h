@@ -11,13 +11,21 @@ enum directions{
 	DEFAULT
 };
 
+enum gameState{
+	MAIN_MENU,
+	GAME,
+	GAME_OVER
+};
+
 class GameObjt
 {
+	protected:
 		uint16_t x, y, mWidth, mHeight, vel;
 		unsigned char id;
 		directions headDir, drs[0x10];
 		SDL_Texture* mTexture;
 		SDL_Rect clip;
+		SDL_Rect* hitbox;
 	public:
 		//Initializes variables
 		GameObjt(uint16_t, uint16_t, directions, unsigned char);
@@ -31,7 +39,8 @@ class GameObjt
 		void free();
 
 		//Renders texture at given point
-		void render(SDL_Renderer*);
+		virtual void render(SDL_Renderer*, SDL_Rect* = NULL, SDL_RendererFlip = SDL_FLIP_NONE);
+
 		
 		void setPos(uint16_t, uint16_t);
 		
@@ -46,6 +55,7 @@ class GameObjt
 		uint16_t getHeight();
 		uint16_t gx();
 		uint16_t gy();
+		SDL_Rect* ghitbox();
 		void sx(uint16_t);
 		void sy(uint16_t);
 		
@@ -68,4 +78,33 @@ class TexLoader{
 
 		//Deallocates texture
 		void free();
+};
+
+class SnakeHead : public GameObjt{
+	public:
+		SnakeHead(uint16_t a , uint16_t b, directions c, unsigned char d) : GameObjt(a, b, c, d){};
+		void render(SDL_Renderer*, SDL_Rect* = NULL, SDL_RendererFlip = SDL_FLIP_NONE);
+};
+
+class SnakeSect : public GameObjt{
+	public:
+		SnakeSect(uint16_t a , uint16_t b, directions c, unsigned char d) : GameObjt(a, b, c, d){};
+		void render(SDL_Renderer*, SDL_Rect* = NULL, SDL_RendererFlip = SDL_FLIP_NONE);
+};
+
+class TextProcessor {
+		SDL_Texture* fonts;
+		SDL_Rect getCharPos(char);
+	public:
+		//Initializes variables
+		TextProcessor(SDL_Texture*);
+
+		//Deallocates memory
+		~TextProcessor();
+		
+		//Deallocates texture
+		void free();
+
+		//Renders texture at given point
+		void render(SDL_Renderer*,uint16_t, uint16_t, std::string, uint8_t = 1);
 };
