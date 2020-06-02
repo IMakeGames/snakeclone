@@ -13,13 +13,13 @@ GameObjt::GameObjt(uint16_t ex, uint16_t yi, directions hDir, unsigned char xid)
 	id = xid;
 	x = ex;
 	y = yi;
-	vel = 4;
+	vel = 3;
 	headDir = hDir;
 	mTexture = NULL;
 	mWidth = 0x20;
 	mHeight = 0x20;
 	SDL_Texture* mTexture = NULL;
-	for(int i = 0; i<0x10;i++){
+	for(int i = 0; i<0x0A;i++){
 		drs[i] = DEFAULT;
 	}
 	hitbox = new SDL_Rect{x+0x08,y+0x08,0x08,0x08};
@@ -101,10 +101,10 @@ directions GameObjt::updatePos(){
 }
 
 void GameObjt::enQueue(directions toQ){
-	int ind = 0x0F;
+	int ind = 0x09;
 	if(drs[0] != DEFAULT){
 		bool shifting = true;
-		directions retVal = drs[0x0F];
+		directions retVal = drs[0x09];
 		while(shifting){
 			if(ind > 0){
 				drs[ind] = drs[ind-1];

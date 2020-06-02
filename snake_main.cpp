@@ -58,7 +58,7 @@ bool init(){
 			printf( "Warning: Linear texture filtering not enabled!" );
 		}
 
-		gWindow = SDL_CreateWindow("MY SDL TUTORIAL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		gWindow = SDL_CreateWindow("SNAKE ASS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		if( gWindow == NULL){
 			printf("Window could not be created and that's it. Error: %s\n", SDL_GetError());
 			success = false;
@@ -232,12 +232,12 @@ bool doGameOver(){
 		SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(gRenderer);
 		std::string posString = "game over bitch";
-		proc->render(gRenderer, 1*0x20, 7*0x20, posString, 2);
+		proc->render(gRenderer, 0x10, 7*0x20, posString, 2);
 		posString = "final apple score: ";
 		posString += std::to_string(sectIndex);
-		proc->render(gRenderer, 2.5*0x20, 9*0x20, posString);
+		proc->render(gRenderer, 2*0x20, 9*0x20, posString);
 		posString = "press space to start again";
-		proc->render(gRenderer, 2.5*0x20, 10*0x20, posString);
+		proc->render(gRenderer, 2*0x20, 10*0x20, posString);
 		SDL_RenderPresent( gRenderer);
 
 		Uint32 endTime = SDL_GetTicks();
